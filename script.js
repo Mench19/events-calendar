@@ -3,8 +3,8 @@ const tg = window.Telegram.WebApp;
 tg.ready();
 tg.expand();
 
-// ===== Supabase =====
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// =====db. =====
+constdb. = window.supabase.createClient(SUPABASE_URL,db._ANON_KEY);
 
 // ===== Пользователь =====
 const tgUser = tg.initDataUnsafe?.user;
@@ -35,7 +35,7 @@ async function init() {
 }
 
 async function checkAdmin() {
-  const { data, error } = await supabase
+  const { data, error } = awaitdb.
     .from('admins')
     .select('user_id')
     .eq('user_id', USER_ID)
@@ -48,7 +48,7 @@ async function checkAdmin() {
 }
 
 async function loadEvents() {
-  const { data, error } = await supabase
+  const { data, error } = awaitdb.
     .from('events')
     .select('*')
     .order('date', { ascending: true });
@@ -269,7 +269,7 @@ document.getElementById('back-btn').addEventListener('click', hideEventCard);
 async function updateRegistrationButton(eventId) {
   const btn = document.getElementById('register-btn');
 
-  const { data: myReg } = await supabase
+  const { data: myReg } = awaitdb.
     .from('registrations')
     .select('id')
     .eq('event_id', eventId)
@@ -288,7 +288,7 @@ async function updateRegistrationButton(eventId) {
 }
 
 async function register(eventId) {
-  const { error } = await supabase
+  const { error } = awaitdb.
     .from('registrations')
     .insert({
       event_id: eventId,
@@ -309,7 +309,7 @@ async function unregister(eventId) {
   const ok = await showConfirm('Точно отменить регистрацию?');
   if (!ok) return;
 
-  const { error } = await supabase
+  const { error } = awaitdb.
     .from('registrations')
     .delete()
     .eq('event_id', eventId)
@@ -324,7 +324,7 @@ async function unregister(eventId) {
 }
 
 async function loadParticipants(eventId) {
-  const { data, error } = await supabase
+  const { data, error } = awaitdb.
     .from('registrations')
     .select('user_name, user_username')
     .eq('event_id', eventId)
@@ -360,7 +360,7 @@ async function loadParticipants(eventId) {
 
 // ===== КОММЕНТАРИИ =====
 async function loadComments(eventId) {
-  const { data, error } = await supabase
+  const { data, error } = awaitdb.
     .from('comments')
     .select('*')
     .eq('event_id', eventId)
@@ -396,7 +396,7 @@ document.getElementById('comment-submit').addEventListener('click', async () => 
   const text = input.value.trim();
   if (!text) return;
 
-  const { error } = await supabase
+  const { error } = awaitdb.
     .from('comments')
     .insert({
       event_id: currentEvent.id,
@@ -461,7 +461,7 @@ function hideAdminView() {
 
 async function renderAdminList() {
   // Получаем счётчики регистраций для каждого события
-  const { data: regs } = await supabase
+  const { data: regs } = awaitdb.
     .from('registrations')
     .select('event_id');
 
@@ -536,9 +536,9 @@ async function saveEvent() {
 
   let result;
   if (editingEventId) {
-    result = await supabase.from('events').update(data).eq('id', editingEventId);
+    result = awaitdb..from('events').update(data).eq('id', editingEventId);
   } else {
-    result = await supabase.from('events').insert(data);
+    result = awaitdb..from('events').insert(data);
   }
 
   if (result.error) {
@@ -558,7 +558,7 @@ async function deleteCurrentEvent() {
   const ok = await showConfirm('Удалить это мероприятие? Все регистрации и комментарии тоже удалятся.');
   if (!ok) return;
 
-  const { error } = await supabase
+  const { error } = awaitdb.
     .from('events')
     .delete()
     .eq('id', currentEvent.id);
