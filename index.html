@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Календарь мероприятий</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+
+    <!-- ===== ЭКРАН: КАЛЕНДАРЬ ===== -->
+    <div id="calendar-view" class="screen">
+      <header class="header">
+        <h1>Мероприятия</h1>
+        <button id="admin-btn" class="admin-btn hidden">⚙️</button>
+      </header>
+
+      <div class="month-nav">
+        <button class="nav-btn" id="prev-month">‹</button>
+        <h2 id="month-title"></h2>
+        <button class="nav-btn" id="next-month">›</button>
+      </div>
+
+      <div class="weekdays">
+        <div>Пн</div><div>Вт</div><div>Ср</div><div>Чт</div><div>Пт</div>
+        <div class="weekend">Сб</div><div class="weekend">Вс</div>
+      </div>
+
+      <div class="calendar-grid" id="calendar-grid"></div>
+
+      <div class="upcoming-section">
+        <h3 id="list-title">Все мероприятия</h3>
+        <div id="events-list"></div>
+      </div>
+    </div>
+
+    <!-- ===== ЭКРАН: КАРТОЧКА МЕРОПРИЯТИЯ ===== -->
+    <div id="event-card" class="screen hidden">
+      <button id="back-btn" class="back-btn"><span>←</span> Назад</button>
+      <div class="event-image-wrap">
+        <img id="event-image" src="" alt="Афиша">
+      </div>
+      <div class="event-info">
+        <h2 id="event-title"></h2>
+        <div class="event-date-badge" id="event-date"></div>
+        <p id="event-description"></p>
+
+        <!-- Кнопка регистрации -->
+        <button id="register-btn" class="primary-btn">Буду участвовать</button>
+
+        <!-- Статистика для админа -->
+        <div id="admin-stats" class="admin-stats hidden">
+          <div class="stat-row">
+            <span>Зарегистрировано:</span>
+            <strong id="stat-count">0</strong>
+          </div>
+          <button id="edit-event-btn" class="secondary-btn">Редактировать</button>
+          <button id="delete-event-btn" class="danger-btn">Удалить</button>
+        </div>
+
+        <!-- Список участников -->
+        <div class="section">
+          <h3>Участники <span id="participants-count">(0)</span></h3>
+          <div id="participants-list" class="participants-list"></div>
+        </div>
+
+        <!-- Комментарии -->
+        <div class="section">
+          <h3>Комментарии</h3>
+          <div id="comments-list" class="comments-list"></div>
+          <div class="comment-form">
+            <textarea id="comment-input" placeholder="Написать комментарий..." rows="2"></textarea>
+            <button id="comment-submit" class="primary-btn">Отправить</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== ЭКРАН: АДМИНКА ===== -->
+    <div id="admin-view" class="screen hidden">
+      <button id="admin-back-btn" class="back-btn"><span>←</span> Назад</button>
+      <h1>Управление мероприятиями</h1>
+      <button id="add-event-btn" class="primary-btn full-width">+ Добавить мероприятие</button>
+      <div id="admin-events-list" class="admin-events-list"></div>
+    </div>
+
+    <!-- ===== ФОРМА СОЗДАНИЯ/РЕДАКТИРОВАНИЯ ===== -->
+    <div id="event-form-view" class="screen hidden">
+      <button id="form-back-btn" class="back-btn"><span>←</span> Назад</button>
+      <h1 id="form-title">Новое мероприятие</h1>
+
+      <label class="form-label">
+        Название
+        <input type="text" id="input-title" placeholder="Концерт в парке">
+      </label>
+
+      <label class="form-label">
+        Дата
+        <input type="date" id="input-date">
+      </label>
+
+      <label class="form-label">
+        Ссылка на афишу
+        <input type="text" id="input-image" placeholder="https://...">
+      </label>
+
+      <label class="form-label">
+        Описание
+        <textarea id="input-description" rows="5" placeholder="Краткое описание мероприятия"></textarea>
+      </label>
+
+      <button id="save-event-btn" class="primary-btn full-width">Сохранить</button>
+    </div>
+
+  </div>
+
+  <script src="config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
