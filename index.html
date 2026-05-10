@@ -151,43 +151,44 @@
         </label>
       </div>
 
-      <label class="field">
+<label class="field">
         <span class="field-label">Описание</span>
         <textarea class="field-input" id="formDescription" rows="3" placeholder="Краткое описание мероприятия" style="resize: vertical;"></textarea>
       </label>
 
-<div class="field">
-  <span class="field-label">Афиша</span>
-  <input type="file" id="formImageFile" accept="image/*" style="display:none">
-  <div class="upload-zone" onclick="event.stopPropagation(); document.getElementById('formImageFile').click()">
-    <div id="uploadPlaceholder">
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="opacity:0.5;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-      <p style="font-size: 12px; margin: 6px 0 0; color: #888;">Нажми, чтобы загрузить</p>
-      <p style="font-size: 10px; margin: 2px 0 0; color: #ccc;">JPG, PNG · до 5 МБ</p>
-    </div>
-    <img id="uploadPreview" class="hidden" alt="">
-  </div>
-  <div class="field-hint">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-    <span>Формат <b>16:9</b> · оптимально <b>1600×900&nbsp;px</b> · важное держи в центре</span>
-  </div>
-</div>
+      <div id="formOfflineFields">
+        <div class="field">
+          <span class="field-label">Афиша</span>
+          <input type="file" id="formImageFile" accept="image/*" style="display:none">
+          <div class="upload-zone" onclick="event.stopPropagation(); document.getElementById('formImageFile').click()">
+            <div id="uploadPlaceholder">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="opacity:0.5;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <p style="font-size: 12px; margin: 6px 0 0; color: #888;">Нажми, чтобы загрузить</p>
+              <p style="font-size: 10px; margin: 2px 0 0; color: #ccc;">JPG, PNG · до 5 МБ</p>
+            </div>
+            <img id="uploadPreview" class="hidden" alt="">
+          </div>
+          <div class="field-hint">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <span>Формат <b>16:9</b> · оптимально <b>1600×900&nbsp;px</b> · важное держи в центре</span>
+          </div>
+        </div>
 
-  <label class="field">
-    <span class="field-label">Места проведения</span>
-    <div id="locationsList"></div>
-    <button class="btn-secondary" onclick="addLocationField()" style="margin-top: 6px;">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-      Добавить место
-    </button>
-  </label>
+        <label class="field">
+          <span class="field-label">Места проведения</span>
+          <div id="locationsList"></div>
+          <button class="btn-secondary" onclick="addLocationField()" style="margin-top: 6px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Добавить место
+          </button>
+        </label>
 
-  <label class="field">
-    <span class="field-label">Лимит участников</span>
-    <input class="field-input" type="number" id="formCapacity" placeholder="100" value="50">
-  </label>
-</div>
-        
+        <label class="field">
+          <span class="field-label">Лимит участников</span>
+          <input class="field-input" type="number" id="formCapacity" placeholder="100" value="50">
+        </label>
+      </div>
+
       <div id="formOnlineFields" class="hidden">
         <label class="field">
           <span class="field-label">Спикер</span>
