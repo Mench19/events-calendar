@@ -1546,8 +1546,8 @@ body {
 }
 
 /* Кнопка «Мест нет» — серая неактивная */
-.btn-register.is-disabled,
-.btn-register:disabled {
+#register-btn.is-disabled,
+#register-btn:disabled {
   background: #D3D1C7 !important;
   color: #5F5E5A !important;
   cursor: not-allowed !important;
