@@ -1566,3 +1566,29 @@ body {
   font-size: 12px;
   margin: 8px 0 0;
 }
+
+/* Позиционирование плашки на афише события (карточка детали) */
+.event-hero-seats-badge {
+  position: absolute;
+  top: 60px;
+  right: 16px;
+  z-index: 3;
+}
+
+/* Если есть и статус-бейдж (ИДЁТ СЕЙЧАС / СЕГОДНЯ), сдвигаем плашку под него */
+.event-hero-status + .event-hero-seats-badge {
+  top: 100px;
+}
+
+/* Позиционирование плашки на постере в списке мероприятий */
+.event-card-seats-badge {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  z-index: 2;
+}
+
+/* Если постер тёмный — добавим лёгкую тень для читаемости */
+.event-card-poster .event-card-seats-badge .badge-seats-limited {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
