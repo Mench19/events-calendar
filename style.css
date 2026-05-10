@@ -1445,3 +1445,124 @@ body {
   gap: 8px;
 }
 .form-day-body .field { margin-bottom: 0; }
+/* ============================================
+   ЛИМИТ МЕСТ — галочки и поля в админке
+   ============================================ */
+
+.field-checkbox {
+  flex-direction: row !important;
+  align-items: flex-start !important;
+  gap: 10px;
+  padding: 12px 14px;
+  background: #f5f6f8;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.field-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin: 2px 0 0 0;
+  accent-color: #005EF2;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.field-checkbox-label {
+  font-weight: 500;
+  font-size: 14px;
+  color: #282828;
+  flex: 1;
+}
+
+.field-hint {
+  font-size: 12px;
+  color: #6b6b6b;
+  line-height: 1.4;
+  width: 100%;
+  margin-top: 4px;
+  padding-left: 28px;
+}
+
+.capacity-fields {
+  padding: 14px;
+  background: #f5f6f8;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.capacity-fields.hidden {
+  display: none;
+}
+
+/* ============================================
+   ЛИМИТ МЕСТ — отображение в карточке события
+   ============================================ */
+
+/* Красная плашка «МЕСТ ОГРАНИЧЕНО» */
+.badge-seats-limited {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #DC0330;
+  color: #ffffff;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+/* Счётчик «Занято X из Y» */
+.seats-counter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: #FCEBEB;
+  color: #A32D2D;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  margin: 10px 0;
+}
+
+.seats-counter svg {
+  flex-shrink: 0;
+}
+
+/* Когда мест нет — счётчик становится более красным */
+.seats-counter.is-full {
+  background: #DC0330;
+  color: #ffffff;
+}
+
+/* Кнопка «Мест нет» — серая неактивная */
+.btn-register.is-disabled,
+.btn-register:disabled {
+  background: #D3D1C7 !important;
+  color: #5F5E5A !important;
+  cursor: not-allowed !important;
+  pointer-events: none;
+}
+
+/* Маленькая плашка в карточке списка мероприятий */
+.event-card .badge-seats-limited {
+  font-size: 10px;
+  padding: 3px 7px;
+}
+
+/* В списке мероприятий — счётчик компактнее */
+.event-card .seats-counter {
+  padding: 6px 10px;
+  font-size: 12px;
+  margin: 8px 0 0;
+}
