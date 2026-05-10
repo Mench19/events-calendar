@@ -770,6 +770,29 @@ body {
   display: block;
 }
 
+.field-hint {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 8px 10px;
+  background: #f5f6f8;
+  border-radius: 6px;
+  font-size: 11px;
+  line-height: 1.4;
+  color: #666;
+}
+.field-hint svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: var(--blue);
+  opacity: 0.7;
+}
+.field-hint b {
+  color: #282828;
+  font-weight: 600;
+}
+
 .location-input-row {
   display: flex;
   gap: 6px;
