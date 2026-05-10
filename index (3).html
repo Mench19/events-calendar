@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Календарь Федерации ИЖС</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ===== SCREEN: CALENDAR ===== -->
+  <div id="screen-calendar" class="screen active">
+    <div class="header-blue">
+      <div class="header-content">
+        <div class="header-title-block">
+          <p class="header-title">Календарь</p>
+          <p class="header-subtitle">мероприятий</p>
+        </div>
+        <img src="logo-white.svg" alt="Федерация ИЖС" class="logo-svg">
+      </div>
+    </div>
+
+    <div class="month-nav">
+      <button class="nav-btn" onclick="changeMonth(-1)">‹</button>
+      <p class="month-title" id="monthTitle">МАЙ 2026</p>
+      <button class="nav-btn" onclick="changeMonth(1)">›</button>
+    </div>
+
+    <div class="weekdays">
+      <div>ПН</div><div>ВТ</div><div>СР</div><div>ЧТ</div><div>ПТ</div><div>СБ</div><div>ВС</div>
+    </div>
+    <div class="calendar-grid" id="calendarGrid"></div>
+
+    <div class="list-section">
+      <p class="list-title" id="listTitle">События</p>
+      <div id="eventsList"></div>
+    </div>
+  </div>
+
+  <!-- ===== SCREEN: EVENTS ===== -->
+  <div id="screen-events" class="screen">
+    <div class="simple-header">
+      <h1>Мероприятия<br>Федерации ИЖС</h1>
+      <p id="eventsHeaderSub">Загрузка...</p>
+    </div>
+    <div class="events-cards-list" id="eventsCardsList"></div>
+  </div>
+
+  <!-- ===== SCREEN: ONLINE ===== -->
+  <div id="screen-online" class="screen">
+    <div class="simple-header">
+      <h1>Вебинары<br>Федерации ИЖС</h1>
+      <p id="onlineHeaderSub">Загрузка...</p>
+    </div>
+    <div class="webinar-list" id="webinarList"></div>
+  </div>
+
+  <!-- ===== SCREEN: PROFILE ===== -->
+  <div id="screen-profile" class="screen">
+    <div class="profile-header">
+      <div class="profile-content">
+        <div class="profile-avatar" id="profileAvatar">?</div>
+        <p class="profile-name" id="profileName">Гость</p>
+        <p class="profile-company" id="profileCompany"></p>
+      </div>
+    </div>
+
+    <div class="profile-section">
+      <p class="section-label" id="myRegLabel">Предстоящие</p>
+      <div id="myRegistrations"></div>
+
+      <div id="adminMenu" class="hidden" style="margin-top: 16px; padding-top: 14px; border-top: 0.5px solid #eee;">
+        <div class="menu-item" onclick="openAdmin()">
+          <div class="icon-wrap">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+          </div>
+          <span class="menu-text">Админ-панель</span>
+          <span class="menu-arrow">›</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SCREEN: EVENT CARD ===== -->
+  <div id="screen-event" class="screen event-card-screen">
+    <div id="eventDetails"></div>
+  </div>
+
+  <!-- ===== SCREEN: ADMIN ===== -->
+  <div id="screen-admin" class="screen">
+    <div class="simple-header" style="display: flex; align-items: center; gap: 12px;">
+      <button class="back-btn dark" onclick="switchTab('profile')" style="margin: 0;">‹</button>
+      <h1 style="font-size: 18px; flex: 1;">Админ-панель</h1>
+    </div>
+    <div style="padding: 14px;">
+      <button class="btn-primary" onclick="openEventForm(null)" style="margin-bottom: 10px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Добавить мероприятие
+      </button>
+      <button class="btn-secondary" onclick="openCategoriesEditor()" style="margin-bottom: 18px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r="0.5"/><circle cx="17.5" cy="10.5" r="0.5"/><circle cx="8.5" cy="7.5" r="0.5"/><circle cx="6.5" cy="12.5" r="0.5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125 0-.937.748-1.687 1.687-1.687h1.997c3.103 0 5.643-2.54 5.643-5.643C22 6.812 17.522 2 12 2z"/></svg>
+        Управление категориями
+      </button>
+
+      <p class="section-label">Все мероприятия</p>
+      <div id="adminEventsList"><div class="loading">Загрузка...</div></div>
+    </div>
+  </div>
+
+  <!-- ===== SCREEN: ADMIN EVENT FORM ===== -->
+  <div id="screen-admin-form" class="screen">
+    <div class="simple-header" style="display: flex; align-items: center; gap: 12px;">
+      <button class="back-btn dark" onclick="closeAdminForm()" style="margin: 0;">‹</button>
+      <h1 style="font-size: 18px; flex: 1;" id="adminFormTitle">Новое мероприятие</h1>
+    </div>
+    <div style="padding: 14px;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 14px;">
+        <button id="formTypeOffline" class="btn-toggle active" onclick="setEventType(false)">ОФЛАЙН</button>
+        <button id="formTypeOnline" class="btn-toggle" onclick="setEventType(true)">ОНЛАЙН</button>
+      </div>
+
+      <label class="field">
+        <span class="field-label">Категория</span>
+        <select class="field-input" id="formCategory"></select>
+      </label>
+
+      <label class="field">
+        <span class="field-label">Название</span>
+        <input class="field-input" id="formTitle" placeholder="Бизнес-завтрак с инвесторами">
+      </label>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
+        <label class="field">
+          <span class="field-label">Дата</span>
+          <input class="field-input" type="date" id="formDate">
+        </label>
+        <label class="field">
+          <span class="field-label">Начало</span>
+          <input class="field-input" type="time" id="formTime" value="10:00">
+        </label>
+        <label class="field">
+          <span class="field-label">Конец</span>
+          <input class="field-input" type="time" id="formEndTime" value="12:00">
+        </label>
+      </div>
+
+      <label class="field">
+        <span class="field-label">Описание</span>
+        <textarea class="field-input" id="formDescription" rows="3" placeholder="Краткое описание мероприятия" style="resize: vertical;"></textarea>
+      </label>
+
+      <div id="formOfflineFields">
+        <div class="field">
+          <span class="field-label">Афиша</span>
+          <input type="file" id="formImageFile" accept="image/*" style="display:none">
+          <div class="upload-zone" onclick="event.stopPropagation(); document.getElementById('formImageFile').click()">
+            <div id="uploadPlaceholder">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="opacity:0.5;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <p style="font-size: 12px; margin: 6px 0 0; color: #888;">Нажми, чтобы загрузить</p>
+              <p style="font-size: 10px; margin: 2px 0 0; color: #ccc;">JPG, PNG · до 5 МБ</p>
+            </div>
+            <img id="uploadPreview" class="hidden" alt="">
+          </div>
+          <div class="field-hint">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <span>Формат <b>16:9</b> · оптимально <b>1600×900&nbsp;px</b> · важное держи в центре</span>
+          </div>
+        </div>
+
+        <label class="field">
+          <span class="field-label">Места проведения</span>
+          <div id="locationsList"></div>
+          <button class="btn-secondary" onclick="addLocationField()" style="margin-top: 6px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Добавить место
+          </button>
+        </label>
+
+        <label class="field">
+          <span class="field-label">Лимит участников</span>
+          <input class="field-input" type="number" id="formCapacity" placeholder="100" value="50">
+        </label>
+      </div>
+
+      <div id="formOnlineFields" class="hidden">
+        <label class="field">
+          <span class="field-label">Спикер</span>
+          <input class="field-input" id="formSpeaker" placeholder="Иван Иванов">
+        </label>
+        <label class="field">
+          <span class="field-label">Должность спикера</span>
+          <input class="field-input" id="formSpeakerRole" placeholder="Директор по маркетингу">
+        </label>
+        <label class="field">
+          <span class="field-label">Ссылка на Zoom</span>
+          <input class="field-input" id="formZoomUrl" placeholder="https://zoom.us/j/...">
+        </label>
+      </div>
+
+      <button class="btn-primary" onclick="saveAdminEvent()" style="margin-top: 16px;">
+        <span id="saveBtnText">Сохранить</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== SCREEN: CATEGORIES EDITOR ===== -->
+  <div id="screen-categories" class="screen">
+    <div class="simple-header" style="display: flex; align-items: center; gap: 12px;">
+      <button class="back-btn dark" onclick="switchTab('admin')" style="margin: 0;">‹</button>
+      <h1 style="font-size: 18px; flex: 1;">Категории</h1>
+    </div>
+    <div style="padding: 14px;">
+      <button class="btn-primary" onclick="openCategoryForm(null)" style="margin-bottom: 14px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Новая категория
+      </button>
+      <div id="categoriesList"></div>
+    </div>
+  </div>
+
+  <!-- ===== TAB BAR ===== -->
+  <div class="tabbar" id="tabbar">
+    <button class="tab active" data-tab="calendar" onclick="switchTab('calendar')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      <span>Календарь</span>
+    </button>
+    <button class="tab" data-tab="events" onclick="switchTab('events')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+      <span>Мероприятия</span>
+    </button>
+    <button class="tab" data-tab="online" onclick="switchTab('online')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      <span>Онлайн</span>
+    </button>
+    <button class="tab" data-tab="profile" onclick="switchTab('profile')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>Профиль</span>
+    </button>
+  </div>
+
+  <!-- ===== MODAL: REGISTRATION ===== -->
+  <div class="modal-overlay" id="regModal">
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <p class="modal-title">Подтверждение участия</p>
+      <p class="modal-subtitle" id="modalEventName">Заполни данные для регистрации</p>
+
+      <label class="field">
+        <span class="field-label">ФИО</span>
+        <input class="field-input" id="inputFio" placeholder="Иван Иванов">
+      </label>
+      <label class="field">
+        <span class="field-label">Компания</span>
+        <input class="field-input" id="inputCompany" placeholder="ООО «Ромашка»">
+      </label>
+
+      <button class="btn-primary" onclick="confirmRegistration()" style="margin-top: 8px;">Подтвердить</button>
+      <button class="btn-primary cancel" onclick="closeModal()" style="margin-top: 8px;">Отмена</button>
+    </div>
+  </div>
+
+  <!-- ===== MODAL: CATEGORY FORM ===== -->
+  <div class="modal-overlay" id="catModal">
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <p class="modal-title" id="catModalTitle">Новая категория</p>
+      <label class="field">
+        <span class="field-label">Название</span>
+        <input class="field-input" id="catName" placeholder="Например: Welcome day">
+      </label>
+      <label class="field">
+        <span class="field-label">Slug (латиницей, без пробелов)</span>
+        <input class="field-input" id="catSlug" placeholder="welcome-day">
+      </label>
+      <label class="field">
+        <span class="field-label">Цвет маркера</span>
+        <input class="field-input" type="color" id="catColor" value="#005EF2" style="height:50px; padding: 4px;">
+      </label>
+      <button class="btn-primary" onclick="saveCategory()" style="margin-top: 8px;">Сохранить</button>
+      <button class="btn-primary cancel" onclick="closeCatModal()" style="margin-top: 8px;">Отмена</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="config.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
