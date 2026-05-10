@@ -197,10 +197,29 @@
           </label>
         </div>
 
+<label class="field field-checkbox">
+        <input type="checkbox" id="formSeatsLimited">
+        <span class="field-checkbox-label">Места ограничены</span>
+        <span class="field-hint">Показать плашку «МЕСТ ОГРАНИЧЕНО» в карточке события</span>
+      </label>
+
+      <label class="field field-checkbox">
+        <input type="checkbox" id="formHasCapacity">
+        <span class="field-checkbox-label">Указать лимит мест</span>
+        <span class="field-hint">Точное число мест + блокировка регистрации при заполнении</span>
+      </label>
+
+      <div id="capacityFields" class="hidden capacity-fields">
         <label class="field">
-          <span class="field-label">Лимит участников</span>
-          <input class="field-input" type="number" id="formCapacity" placeholder="100" value="50">
+          <span class="field-label">Всего мест</span>
+          <input class="field-input" type="number" id="formCapacity" placeholder="50" value="50" min="1">
         </label>
+        <label class="field">
+          <span class="field-label">Внешних участников</span>
+          <input class="field-input" type="number" id="formExternalCount" placeholder="0" value="0" min="0">
+          <span class="field-hint">Сколько людей записано вручную (по телефону, через личку и т.п.)</span>
+        </label>
+      </div>
       </div>
 
       <div id="formOnlineFields" class="hidden">
